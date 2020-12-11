@@ -1,8 +1,15 @@
 [package]
-name = "rust-template"
+name = "polar-clock"
 version = "0.1.0-dev"
 authors = ["Jonathan Cornaz"]
 edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+yew = "^0.17.4"
+wasm-bindgen = "^0.2.69"
 
 [profile.release]
 lto = true
