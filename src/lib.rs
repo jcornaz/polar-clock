@@ -1,13 +1,14 @@
 use wasm_bindgen::prelude::*;
 use yew::App;
 
-use crate::time_arc::TimeArk;
+use clock::Clock;
 
 mod svg;
-mod time_arc;
+mod arc;
 mod vector;
+mod clock;
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    App::<TimeArk>::new().mount_to_body();
+    App::<Clock>::new().mount_to_body();
 }

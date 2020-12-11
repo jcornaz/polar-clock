@@ -7,6 +7,13 @@ pub(crate) struct Vec2 {
 }
 
 impl Vec2 {
+    pub fn repeat(value: f32) -> Self {
+        Self {
+            x: value,
+            y: value
+        }
+    }
+
     pub fn rotate(self, angle: f32) -> Self {
         Self {
             x: (angle.cos() * self.x) - (angle.sin() * self.y),
