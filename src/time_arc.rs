@@ -1,5 +1,4 @@
 use std::f32::consts::PI;
-use std::iter::FromIterator;
 
 use yew::prelude::*;
 
@@ -84,9 +83,9 @@ impl Component for Arc {
         let end_outer = start_outer.rotate(angle);
         let end_inner = start_inner.rotate(angle);
 
-        let path_data = PathData::from_iter(vec![
-            PathSegment::MoveTo(center + start_outer),
-            PathSegment::Arc {
+        let path_data = PathData::with_capacity(5)
+            .move_to(center + start_outer)
+            .arc_to(center + end_outer, ArcDef {
                 radius: Vec2 {
                     x: self.props.radius + ARC_HALF_WIDTH,
                     y: self.props.radius + ARC_HALF_WIDTH,
@@ -94,10 +93,9 @@ impl Component for Arc {
                 x_axis_rotation: 0.0,
                 large_arc_flag: angle > PI,
                 sweep_flag: true,
-                end: center + end_outer,
-            },
-            PathSegment::LineTo(center + end_inner),
-            PathSegment::Arc {
+            })
+            .line_to(center + end_inner)
+            .arc_to(center + start_inner, ArcDef {
                 radius: Vec2 {
                     x: self.props.radius - ARC_HALF_WIDTH,
                     y: self.props.radius - ARC_HALF_WIDTH,
@@ -105,13 +103,12 @@ impl Component for Arc {
                 x_axis_rotation: 0.0,
                 large_arc_flag: angle > PI,
                 sweep_flag: false,
-                end: center + start_inner,
-            },
-            PathSegment::Close,
-        ]);
+            })
+            .close()
+            .to_string();
 
         html! {
-            <path d=path_data.to_string() fill=self.props.color />
+            <path d=path_data fill=self.props.color />
         }
     }
 }

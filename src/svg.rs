@@ -1,19 +1,53 @@
 use std::fmt::{self, Display, Formatter};
 
-use wasm_bindgen::__rt::core::iter::FromIterator;
-
 use crate::vector::Vec2;
 
-pub(crate) enum PathSegment {
+pub(crate) struct PathData(Vec<PathSegment>);
+
+impl PathData {
+    pub fn with_capacity(capacity: usize) -> Self { Self(Vec::with_capacity(capacity)) }
+
+    pub fn move_to(&mut self, point: Vec2) -> &mut Self {
+        self.0.push(PathSegment::MoveTo(point));
+        self
+    }
+
+    pub fn line_to(&mut self, point: Vec2) -> &mut Self {
+        self.0.push(PathSegment::LineTo(point));
+        self
+    }
+
+    pub fn arc_to(&mut self, point: Vec2, def: ArcDef) -> &mut Self {
+        self.0.push(PathSegment::Arc(point, def));
+        self
+    }
+
+    pub fn close(&mut self) -> &mut Self {
+        self.0.push(PathSegment::Close);
+        self
+    }
+}
+
+impl std::fmt::Display for PathData {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        for segment in &self.0 {
+            write!(f, "{} ", segment)?;
+        }
+        std::fmt::Result::Ok(())
+    }
+}
+
+pub(crate) struct ArcDef {
+    pub radius: Vec2,
+    pub x_axis_rotation: f32,
+    pub large_arc_flag: bool,
+    pub sweep_flag: bool,
+}
+
+enum PathSegment {
     MoveTo(Vec2),
     LineTo(Vec2),
-    Arc {
-        radius: Vec2,
-        x_axis_rotation: f32,
-        large_arc_flag: bool,
-        sweep_flag: bool,
-        end: Vec2,
-    },
+    Arc(Vec2, ArcDef),
     Close,
 }
 
@@ -22,13 +56,12 @@ impl Display for PathSegment {
         match self {
             PathSegment::MoveTo(Vec2 { x, y }) => write!(f, "M {} {}", x, y),
             PathSegment::LineTo(Vec2 { x, y }) => write!(f, "L {} {}", x, y),
-            PathSegment::Arc {
+            PathSegment::Arc(Vec2 { x, y }, ArcDef {
                 radius: Vec2 { x: rx, y: ry },
                 x_axis_rotation,
                 large_arc_flag,
                 sweep_flag,
-                end: Vec2 { x, y },
-            } => {
+            }) => {
                 write!(
                     f,
                     "A {} {} {} {} {} {} {}",
@@ -43,22 +76,5 @@ impl Display for PathSegment {
             }
             PathSegment::Close => write!(f, "Z"),
         }
-    }
-}
-
-pub(crate) struct PathData(Vec<PathSegment>);
-
-impl FromIterator<PathSegment> for PathData {
-    fn from_iter<T: IntoIterator<Item = PathSegment>>(iter: T) -> Self {
-        Self(iter.into_iter().collect())
-    }
-}
-
-impl std::fmt::Display for PathData {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for segment in &self.0 {
-            write!(f, "{} ", segment)?;
-        }
-        std::fmt::Result::Ok(())
     }
 }
