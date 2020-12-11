@@ -1,7 +1,7 @@
 use std::ops::{Add, Sub};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub struct Vec2 {
+pub(crate) struct Vec2 {
     pub x: f32,
     pub y: f32,
 }
