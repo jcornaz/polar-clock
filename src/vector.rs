@@ -13,10 +13,6 @@ impl Vec2 {
             y: (angle.sin() * self.x) + (angle.cos() * self.y),
         }
     }
-
-    pub fn length(&self) -> f32 {
-        ((self.x * self.x) + (self.y * self.y)).sqrt()
-    }
 }
 
 impl Add for Vec2 {
