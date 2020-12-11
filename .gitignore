@@ -1,0 +1,13 @@
+# Rust
+/target
+/.cargo/*.toml
+
+# IDE
+.idea/
+out/
+*.iml
+
+# Operating systems
+.DS_Store
+.trashes
+*.db
