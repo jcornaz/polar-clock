@@ -8,6 +8,7 @@ use clock::PolarClock;
 mod arc;
 mod clock;
 mod svg;
+mod time;
 mod vector;
 
 #[wasm_bindgen(start)]
