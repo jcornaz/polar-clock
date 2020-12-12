@@ -2,9 +2,9 @@ use core::time::Duration;
 use std::f32::consts::PI;
 
 use yew::prelude::*;
-use yew::services::{IntervalService, TimeoutService};
 use yew::services::interval::IntervalTask;
 use yew::services::timeout::TimeoutTask;
+use yew::services::{IntervalService, TimeoutService};
 
 use crate::svg::*;
 use crate::vector::*;

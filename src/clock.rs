@@ -82,7 +82,7 @@ impl Component for PolarClock {
                     center=CENTER,
                     width=ARC_WIDTH,
                     radius=INNER_RADIUS + (4.0 * ARC_WIDTH)
-                    color="blue",
+                    color="darkred",
                     progress=self.minute_progress(),
                     anim_delay=Duration::from_millis(0),
                     anim_duration=ANIM_DURATION,
@@ -91,7 +91,7 @@ impl Component for PolarClock {
                     center=CENTER,
                     width=ARC_WIDTH,
                     radius=INNER_RADIUS + (3.0 * ARC_WIDTH)
-                    color="green",
+                    color="darkorange",
                     progress=self.hour_progress(),
                     anim_delay=ANIM_DELAY,
                     anim_duration=ANIM_DURATION,
@@ -100,7 +100,7 @@ impl Component for PolarClock {
                     center=CENTER,
                     width=ARC_WIDTH,
                     radius=INNER_RADIUS + (2.0 * ARC_WIDTH)
-                    color="red",
+                    color="gold",
                     progress=self.day_progress(),
                     anim_delay=(ANIM_DELAY * 2),
                     anim_duration=ANIM_DURATION,
@@ -109,7 +109,7 @@ impl Component for PolarClock {
                     center=CENTER,
                     width=ARC_WIDTH,
                     radius=INNER_RADIUS + ARC_WIDTH
-                    color="black",
+                    color="darkgreen",
                     progress=self.month_progress(),
                     anim_delay=(ANIM_DELAY * 3),
                     anim_duration=ANIM_DURATION,
@@ -118,7 +118,7 @@ impl Component for PolarClock {
                     center=CENTER,
                     width=ARC_WIDTH,
                     radius=INNER_RADIUS
-                    color="yellow",
+                    color="darkblue",
                     progress=self.year_progress(),
                     anim_delay=(ANIM_DELAY * 4),
                     anim_duration=ANIM_DURATION,
