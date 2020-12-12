@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use chrono::{DateTime, Local};
+use chrono::{DateTime, Datelike, Local, Timelike};
 use yew::prelude::*;
 use yew::services::interval::IntervalTask;
 use yew::services::IntervalService;
@@ -84,6 +84,7 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS + (4.0 * ARC_WIDTH)
                     color="darkred",
                     progress=self.minute_progress(),
+                    text=format!("{}s", self.now.second()),
                     anim_delay=Duration::from_millis(0),
                     anim_duration=ANIM_DURATION,
                 />
@@ -93,6 +94,7 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS + (3.0 * ARC_WIDTH)
                     color="darkorange",
                     progress=self.hour_progress(),
+                    text=format!("{}m", self.now.minute()),
                     anim_delay=ANIM_DELAY,
                     anim_duration=ANIM_DURATION,
                 />
@@ -102,6 +104,7 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS + (2.0 * ARC_WIDTH)
                     color="gold",
                     progress=self.day_progress(),
+                    text=format!("{}h", self.now.hour()),
                     anim_delay=(ANIM_DELAY * 2),
                     anim_duration=ANIM_DURATION,
                 />
@@ -111,6 +114,12 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS + ARC_WIDTH
                     color="darkgreen",
                     progress=self.month_progress(),
+                    text=format!("{}{}", self.now.day(), match self.now.day() {
+                        1 => "st",
+                        2 => "nd",
+                        3 => "rd",
+                        _ => "th",
+                    }),
                     anim_delay=(ANIM_DELAY * 3),
                     anim_duration=ANIM_DURATION,
                 />
@@ -120,6 +129,7 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS
                     color="darkblue",
                     progress=self.year_progress(),
+                    text=format!("{}", self.now.year()),
                     anim_delay=(ANIM_DELAY * 4),
                     anim_duration=ANIM_DURATION,
                 />

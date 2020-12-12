@@ -7,6 +7,10 @@ pub(crate) struct Vec2 {
 }
 
 impl Vec2 {
+    pub const fn new(x: f32, y: f32) -> Self {
+        Self { x, y }
+    }
+
     pub const fn repeat(value: f32) -> Self {
         Self { x: value, y: value }
     }

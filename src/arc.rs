@@ -16,6 +16,7 @@ pub(crate) struct TimeArcProp {
     pub width: f32,
     pub color: &'static str,
     pub progress: f32,
+    pub text: String,
     pub anim_delay: Duration,
     pub anim_duration: Duration,
 }
@@ -108,10 +109,13 @@ impl Component for TimeArc {
             y: -outer_radius,
         };
 
+        let outer_end = outer_start.rotate(angle);
+        let inner_end = inner_start.rotate(angle);
+
         let path_data = PathData::with_capacity(5)
             .move_to(center + outer_start)
             .arc_to(
-                center + outer_start.rotate(angle),
+                center + outer_end,
                 ArcDef {
                     radius: Vec2 {
                         x: outer_radius,
@@ -122,7 +126,7 @@ impl Component for TimeArc {
                     sweep_flag: true,
                 },
             )
-            .line_to(center + inner_start.rotate(angle))
+            .line_to(center + inner_end)
             .arc_to(
                 center + inner_start,
                 ArcDef {
@@ -138,8 +142,26 @@ impl Component for TimeArc {
             .close()
             .to_string();
 
+        let text_angle = angle + (PI / 180.0);
+        let text_pos =
+            center + Vec2::new(0.0, -inner_radius - (0.3 * self.props.width)).rotate(text_angle);
+        let text_transform = format!(
+            "rotate({} {} {})",
+            -((2.0 * PI) - text_angle).to_degrees(),
+            text_pos.x,
+            text_pos.y
+        );
         html! {
-            <path d=path_data fill=self.props.color />
+            <>
+                <path d=path_data fill=self.props.color />
+                <text
+                    x=text_pos.x
+                    y=text_pos.y
+                    font-size=(self.props.width * 0.6)
+                    transform=text_transform
+                    fill=self.props.color
+                >{ &self.props.text }</text>
+            </>
         }
     }
 }
