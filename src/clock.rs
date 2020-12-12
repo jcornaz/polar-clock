@@ -31,23 +31,23 @@ pub(crate) struct PolarClock {
 
 impl PolarClock {
     fn minute_progress(&self) -> f32 {
-        self.now.millisecond_of_minute() as f32 / 60_000.0
+        (self.now.millisecond_of_minute() as f32) / 60_000.0
     }
 
     fn hour_progress(&self) -> f32 {
-        self.now.millisecond_of_hour() as f32 / 3_600_000.0
+        (self.now.millisecond_of_hour() as f32) / 3_600_000.0
     }
 
     fn day_progress(&self) -> f32 {
-        self.now.second_of_day() as f32 / 86_400.0
+        (self.now.second_of_day() as f32) / 86_400.0
     }
 
     fn month_progress(&self) -> f32 {
-        self.now.minute_of_month() as f32 / (30.0 * 1440.0)
+        (self.now.minute_of_month() as f32) / (self.now.max_minute_of_month() as f32)
     }
 
     fn year_progress(&self) -> f32 {
-        self.now.hour_of_year() as f32 / (365.0 * 24.0)
+        (self.now.hour_of_year() as f32) / (self.now.max_hour_of_year() as f32)
     }
 }
 
