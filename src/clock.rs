@@ -9,25 +9,25 @@ use crate::arc::TimeArc;
 use crate::time::DateTimeExt;
 use crate::vector::Vec2;
 
+//region Settings
+const SIZE: f32 = 100.0;
+const INNER_PADDING: f32 = 20.0;
+const OUTER_PADDING: f32 = 5.0;
+const ANIM_DURATION: Duration = Duration::from_secs(2);
+const ANIM_DELAY: Duration = Duration::from_millis(100);
+//endregion
+
+//region Derived from settings
+const CENTER: Vec2 = Vec2::repeat(SIZE / 2.0);
+const ARC_WIDTH: f32 = (CENTER.x - INNER_PADDING - OUTER_PADDING) / 5.0;
+const HALF_ARC_WIDTH: f32 = ARC_WIDTH / 2.0;
+const INNER_RADIUS: f32 = INNER_PADDING + HALF_ARC_WIDTH;
 lazy_static! {
-    static ref ANIM_DURATION: Duration = Duration::from_secs(2);
+    static ref VIEW_BOX: String = format!("0 0 {} {}", SIZE, SIZE);
 }
-
-#[derive(Properties, Copy, Clone)]
-pub(crate) struct ClockProps {
-    pub size: f32,
-}
-
-impl Default for ClockProps {
-    fn default() -> Self {
-        Self { size: 500.0 }
-    }
-}
-
-pub(crate) struct Tick;
+//endregion
 
 pub(crate) struct PolarClock {
-    size: f32,
     now: DateTime<Local>,
     #[allow(dead_code)]
     task: IntervalTask,
@@ -56,14 +56,13 @@ impl PolarClock {
 }
 
 impl Component for PolarClock {
-    type Message = Tick;
-    type Properties = ClockProps;
+    type Message = ();
+    type Properties = ();
 
-    fn create(ClockProps { size }: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
         Self {
-            size,
             now: Local::now(),
-            task: IntervalService::spawn(Duration::from_millis(30), link.callback(|_| Tick)),
+            task: IntervalService::spawn(Duration::from_millis(30), link.callback(|_| ())),
         }
     }
 
@@ -72,60 +71,57 @@ impl Component for PolarClock {
         true
     }
 
-    fn change(&mut self, ClockProps { size }: Self::Properties) -> bool {
-        self.size = size;
-        true
+    fn change(&mut self, _: Self::Properties) -> bool {
+        false
     }
 
     fn view(&self) -> Html {
-        let center = Vec2::repeat(self.size / 2.0);
-
         html! {
-            <svg width=self.size height=self.size>
+            <svg viewBox=&VIEW_BOX>
                 <TimeArc
-                    center=center,
-                    radius=((self.size / 2.0) - 5.0)
-                    width=10.0,
+                    center=CENTER,
+                    width=ARC_WIDTH,
+                    radius=INNER_RADIUS + (4.0 * ARC_WIDTH)
                     color="blue",
                     progress=self.minute_progress(),
                     anim_delay=Duration::from_millis(0),
-                    anim_duration=Duration::from_secs(2),
+                    anim_duration=ANIM_DURATION,
                 />
                 <TimeArc
-                    center=center,
-                    radius=((self.size / 2.0) - 15.0)
-                    width=10.0,
+                    center=CENTER,
+                    width=ARC_WIDTH,
+                    radius=INNER_RADIUS + (3.0 * ARC_WIDTH)
                     color="green",
                     progress=self.hour_progress(),
-                    anim_delay=Duration::from_millis(100),
-                    anim_duration=Duration::from_secs(2),
+                    anim_delay=ANIM_DELAY,
+                    anim_duration=ANIM_DURATION,
                 />
                 <TimeArc
-                    center=center,
-                    radius=((self.size / 2.0) - 25.0)
-                    width=10.0,
+                    center=CENTER,
+                    width=ARC_WIDTH,
+                    radius=INNER_RADIUS + (2.0 * ARC_WIDTH)
                     color="red",
                     progress=self.day_progress(),
-                    anim_delay=Duration::from_millis(200),
-                    anim_duration=Duration::from_secs(2),
+                    anim_delay=(ANIM_DELAY * 2),
+                    anim_duration=ANIM_DURATION,
                 />
                 <TimeArc
-                    center=center,
-                    radius=((self.size / 2.0) - 35.0)
-                    width=10.0,
+                    center=CENTER,
+                    width=ARC_WIDTH,
+                    radius=INNER_RADIUS + ARC_WIDTH
                     color="black",
                     progress=self.month_progress(),
-                    anim_delay=Duration::from_millis(300),
-                    anim_duration=Duration::from_secs(2),
+                    anim_delay=(ANIM_DELAY * 3),
+                    anim_duration=ANIM_DURATION,
                 />
                 <TimeArc
-                    center=center,
-                    radius=((self.size / 2.0) - 45.0)
-                    width=10.0,
+                    center=CENTER,
+                    width=ARC_WIDTH,
+                    radius=INNER_RADIUS
                     color="yellow",
                     progress=self.year_progress(),
-                    anim_delay=Duration::from_millis(400),
-                    anim_duration=Duration::from_secs(2),
+                    anim_delay=(ANIM_DELAY * 4),
+                    anim_duration=ANIM_DURATION,
                 />
             </svg>
         }
