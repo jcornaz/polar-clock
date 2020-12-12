@@ -1,14 +1,16 @@
+#![recursion_limit = "1024"]
+
 use wasm_bindgen::prelude::*;
 use yew::App;
 
-use clock::Clock;
+use clock::PolarClock;
 
-mod svg;
 mod arc;
-mod vector;
 mod clock;
+mod svg;
+mod vector;
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
-    App::<Clock>::new().mount_to_body();
+    App::<PolarClock>::new().mount_to_body();
 }

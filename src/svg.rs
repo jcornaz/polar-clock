@@ -5,7 +5,9 @@ use crate::vector::Vec2;
 pub(crate) struct PathData(Vec<PathSegment>);
 
 impl PathData {
-    pub fn with_capacity(capacity: usize) -> Self { Self(Vec::with_capacity(capacity)) }
+    pub fn with_capacity(capacity: usize) -> Self {
+        Self(Vec::with_capacity(capacity))
+    }
 
     pub fn move_to(&mut self, point: Vec2) -> &mut Self {
         self.0.push(PathSegment::MoveTo(point));
@@ -56,12 +58,15 @@ impl Display for PathSegment {
         match self {
             PathSegment::MoveTo(Vec2 { x, y }) => write!(f, "M {} {}", x, y),
             PathSegment::LineTo(Vec2 { x, y }) => write!(f, "L {} {}", x, y),
-            PathSegment::Arc(Vec2 { x, y }, ArcDef {
-                radius: Vec2 { x: rx, y: ry },
-                x_axis_rotation,
-                large_arc_flag,
-                sweep_flag,
-            }) => {
+            PathSegment::Arc(
+                Vec2 { x, y },
+                ArcDef {
+                    radius: Vec2 { x: rx, y: ry },
+                    x_axis_rotation,
+                    large_arc_flag,
+                    sweep_flag,
+                },
+            ) => {
                 write!(
                     f,
                     "A {} {} {} {} {} {} {}",

@@ -58,25 +58,31 @@ impl Component for TimeArc {
 
         let path_data = PathData::with_capacity(5)
             .move_to(center + outer_start)
-            .arc_to(center + outer_start.rotate(angle), ArcDef {
-                radius: Vec2 {
-                    x: outer_radius,
-                    y: outer_radius,
+            .arc_to(
+                center + outer_start.rotate(angle),
+                ArcDef {
+                    radius: Vec2 {
+                        x: outer_radius,
+                        y: outer_radius,
+                    },
+                    x_axis_rotation: 0.0,
+                    large_arc_flag: angle > PI,
+                    sweep_flag: true,
                 },
-                x_axis_rotation: 0.0,
-                large_arc_flag: angle > PI,
-                sweep_flag: true,
-            })
+            )
             .line_to(center + inner_start.rotate(angle))
-            .arc_to(center + inner_start, ArcDef {
-                radius: Vec2 {
-                    x: inner_radius,
-                    y: inner_radius,
+            .arc_to(
+                center + inner_start,
+                ArcDef {
+                    radius: Vec2 {
+                        x: inner_radius,
+                        y: inner_radius,
+                    },
+                    x_axis_rotation: 0.0,
+                    large_arc_flag: angle > PI,
+                    sweep_flag: false,
                 },
-                x_axis_rotation: 0.0,
-                large_arc_flag: angle > PI,
-                sweep_flag: false,
-            })
+            )
             .close()
             .to_string();
 
