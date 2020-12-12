@@ -1,13 +1,13 @@
+use core::time::Duration;
 use std::f32::consts::PI;
 
 use yew::prelude::*;
+use yew::services::interval::IntervalTask;
+use yew::services::timeout::TimeoutTask;
+use yew::services::{IntervalService, TimeoutService};
 
 use crate::svg::*;
 use crate::vector::*;
-
-pub(crate) struct TimeArc {
-    props: TimeArcProp,
-}
 
 #[derive(Properties, Clone, PartialEq)]
 pub(crate) struct TimeArcProp {
@@ -16,31 +16,83 @@ pub(crate) struct TimeArcProp {
     pub width: f32,
     pub color: String,
     pub progress: f32,
+    pub anim_delay: Duration,
+    pub anim_duration: Duration,
+}
+
+pub(crate) enum TimeArcMsg {
+    StartAnimation,
+    TickAnimation(f32),
+}
+
+pub(crate) struct TimeArc {
+    props: TimeArcProp,
+    link: ComponentLink<Self>,
+    animation: AnimTask,
+    progress: f32,
 }
 
 impl Component for TimeArc {
-    type Message = ();
+    type Message = TimeArcMsg;
     type Properties = TimeArcProp;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
+        Self {
+            progress: props.progress,
+            animation: AnimTask::None,
+            props,
+            link,
+        }
     }
 
-    fn update(&mut self, _: Self::Message) -> bool {
-        false
+    fn update(&mut self, msg: Self::Message) -> bool {
+        match msg {
+            TimeArcMsg::StartAnimation => {
+                let interval_duration = Duration::from_millis(20);
+                let delta =
+                    interval_duration.as_secs_f32() / self.props.anim_duration.as_secs_f32();
+
+                self.animation = AnimTask::Animate(IntervalService::spawn(
+                    interval_duration,
+                    self.link
+                        .callback(move |_| TimeArcMsg::TickAnimation(delta)),
+                ));
+                false
+            }
+            TimeArcMsg::TickAnimation(delta) => {
+                self.progress -= delta;
+                if self.progress < self.props.progress {
+                    self.progress = self.props.progress;
+                    self.animation = AnimTask::None;
+                }
+                true
+            }
+        }
     }
 
     fn change(&mut self, props: Self::Properties) -> bool {
         if props == self.props {
             false
         } else {
+            if self.progress <= props.progress {
+                // The progress advanced, we immediately update
+                self.progress = props.progress;
+            } else {
+                // The progress has been reset, we start the animation
+                if matches!(self.animation, AnimTask::None) {
+                    self.animation = AnimTask::Delay(TimeoutService::spawn(
+                        props.anim_delay,
+                        self.link.callback(|_| TimeArcMsg::StartAnimation),
+                    ));
+                }
+            }
             self.props = props;
             true
         }
     }
 
     fn view(&self) -> Html {
-        let angle = 2.0 * PI * self.props.progress;
+        let angle = 2.0 * PI * self.progress;
 
         let inner_radius = self.props.radius - (self.props.width / 2.0);
         let outer_radius = inner_radius + self.props.width;
@@ -90,4 +142,11 @@ impl Component for TimeArc {
             <path d=path_data fill=self.props.color />
         }
     }
+}
+
+#[must_use]
+enum AnimTask {
+    Delay(TimeoutTask),
+    Animate(IntervalTask),
+    None,
 }

@@ -374,6 +374,7 @@ name = "polar-clock"
 version = "0.1.0-dev"
 dependencies = [
  "chrono",
+ "lazy_static",
  "wasm-bindgen",
  "yew",
 ]

@@ -9,6 +9,10 @@ use crate::arc::TimeArc;
 use crate::time::DateTimeExt;
 use crate::vector::Vec2;
 
+lazy_static! {
+    static ref ANIM_DURATION: Duration = Duration::from_secs(2);
+}
+
 #[derive(Properties, Copy, Clone)]
 pub(crate) struct ClockProps {
     pub size: f32,
@@ -84,6 +88,8 @@ impl Component for PolarClock {
                     width=10.0,
                     color="blue",
                     progress=self.minute_progress(),
+                    anim_delay=Duration::from_millis(0),
+                    anim_duration=Duration::from_secs(2),
                 />
                 <TimeArc
                     center=center,
@@ -91,6 +97,8 @@ impl Component for PolarClock {
                     width=10.0,
                     color="green",
                     progress=self.hour_progress(),
+                    anim_delay=Duration::from_millis(100),
+                    anim_duration=Duration::from_secs(2),
                 />
                 <TimeArc
                     center=center,
@@ -98,6 +106,8 @@ impl Component for PolarClock {
                     width=10.0,
                     color="red",
                     progress=self.day_progress(),
+                    anim_delay=Duration::from_millis(200),
+                    anim_duration=Duration::from_secs(2),
                 />
                 <TimeArc
                     center=center,
@@ -105,6 +115,8 @@ impl Component for PolarClock {
                     width=10.0,
                     color="black",
                     progress=self.month_progress(),
+                    anim_delay=Duration::from_millis(300),
+                    anim_duration=Duration::from_secs(2),
                 />
                 <TimeArc
                     center=center,
@@ -112,6 +124,8 @@ impl Component for PolarClock {
                     width=10.0,
                     color="yellow",
                     progress=self.year_progress(),
+                    anim_delay=Duration::from_millis(400),
+                    anim_duration=Duration::from_secs(2),
                 />
             </svg>
         }

@@ -1,5 +1,8 @@
 #![recursion_limit = "1024"]
 
+#[macro_use]
+extern crate lazy_static;
+
 use wasm_bindgen::prelude::*;
 use yew::App;
 
