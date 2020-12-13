@@ -2,9 +2,12 @@
 
 ![Build](https://github.com/jcornaz/polar-clock/workflows/Build/badge.svg)
 
-This is a "polar clock", a kind of clock I find especially satisfactory to watch on new-year's eve.
+This is a web "polar clock". A kind of clock I find especially satisfactory to watch on new-year's eve.
+
+It is published here: https://jcornaz.github.io/polar-clock/
 
 I made this project in order to experiment with [rust], [web-assembly] and [yew].
+
 
 [rust]: https://www.rust-lang.org
 [web-assembly]: https://webassembly.org
