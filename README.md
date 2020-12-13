@@ -1,36 +1,18 @@
-# rust-template
+# A simple polar clock with RUST, WASM and YEW
 
-Add badges to quickly give hints to the user/contributors about :
-* licence of the project
-* continuous integration (build status, code coverage, code quality)
-* project status
-* latest version and where to get it
-* documentation
+![Build](https://github.com/jcornaz/polar-clock/workflows/Build/badge.svg)
 
-Give a *short* introduction and/or overview that explains **what** the project is. This description should match descriptions defined in `Cargo.toml`
+This is a "polar clock", a kind of clock I find especially satisfactory to watch on new-year's eve.
 
-## Features
+I made this project in order to experiment with [rust], [web-assembly] and [yew].
 
-List the core "feature" that make this software/library attractive
+[rust]: https://www.rust-lang.org
+[web-assembly]: https://webassembly.org
+[yew]: https://yew.rs
+
 
 ## Status
 
-Unless the project status is "stable". A short section should explain the current status of the project and what is its future. Is it incubating?, experimental? in maintenance mode? or discontinued?
+This was a one-shot toy project that I will not maintain.
 
-If discontinued, this should section should also explain the reasons, and what alternatives are available for the users.
-
-## Example
-
-Show what the project does as concisely as possible, developers should be able to figure out **how** the project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
-
-## Motivation
-
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
-
-## Setup
-
-Provide code examples and explanations of how to get the project for a user.
-
-## Contribute
-
-Let people know how they can dive into the project, include important links to things like issue trackers and contribution guidelines.
+The project is available to anyone interested by studying, modifing or using it. However, be aware that it isn't well tested.
