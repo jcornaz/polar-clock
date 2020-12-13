@@ -1,6 +1,6 @@
 use core::time::Duration;
 
-use chrono::{DateTime, Datelike, Local, Timelike};
+use chrono::{DateTime, Datelike, Local, TimeZone, Timelike};
 use yew::prelude::*;
 use yew::services::interval::IntervalTask;
 use yew::services::IntervalService;
@@ -129,11 +129,29 @@ impl Component for PolarClock {
                     radius=INNER_RADIUS
                     color="darkblue",
                     progress=self.year_progress(),
-                    text=format!("{}", self.now.year()),
+                    text=month_name(&self.now),
                     anim_delay=(ANIM_DELAY * 4),
                     anim_duration=ANIM_DURATION,
                 />
             </svg>
         }
+    }
+}
+
+fn month_name<T: TimeZone>(time: &DateTime<T>) -> &'static str {
+    match time.month() {
+        1 => "jan",
+        2 => "feb",
+        3 => "mar",
+        4 => "apr",
+        5 => "mai",
+        6 => "jun",
+        7 => "jul",
+        8 => "aug",
+        9 => "sep",
+        10 => "oct",
+        11 => "nov",
+        12 => "dec",
+        m => panic!("Invalid month number: {}", m),
     }
 }
