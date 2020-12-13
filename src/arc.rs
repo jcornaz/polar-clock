@@ -142,9 +142,14 @@ impl Component for TimeArc {
             .close()
             .to_string();
 
-        let text_angle = angle + (PI / 180.0);
+        let (text_angle, text_color, text_anchor) = if angle >= PI {
+            (angle - (PI / 180.0), "white", "end")
+        } else {
+            (angle + (PI / 180.0), self.props.color, "start")
+        };
+
         let text_pos =
-            center + Vec2::new(0.0, -inner_radius - (0.3 * self.props.width)).rotate(text_angle);
+            Vec2::new(0.0, -inner_radius - (0.2 * self.props.width)).rotate(text_angle) + center;
         let text_transform = format!(
             "rotate({} {} {})",
             -((2.0 * PI) - text_angle).to_degrees(),
@@ -159,7 +164,8 @@ impl Component for TimeArc {
                     y=text_pos.y
                     font-size=(self.props.width * 0.6)
                     transform=text_transform
-                    fill=self.props.color
+                    fill=text_color
+                    text-anchor=text_anchor
                 >{ &self.props.text }</text>
             </>
         }
