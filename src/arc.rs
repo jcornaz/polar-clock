@@ -49,7 +49,7 @@ impl Component for TimeArc {
     fn update(&mut self, msg: Self::Message) -> bool {
         match msg {
             TimeArcMsg::StartAnimation => {
-                let interval_duration = Duration::from_millis(20);
+                let interval_duration = Duration::from_millis(30);
                 let delta =
                     interval_duration.as_secs_f32() / self.props.anim_duration.as_secs_f32();
 
