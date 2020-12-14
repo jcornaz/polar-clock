@@ -1,4 +1,4 @@
-# A simple polar clock with RUST, WASM and YEW
+# A simple polar clock
 
 ![Build](https://github.com/jcornaz/polar-clock/workflows/Build/badge.svg)
 
